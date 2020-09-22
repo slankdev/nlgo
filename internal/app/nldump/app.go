@@ -57,6 +57,16 @@ func dump(b []byte) {
 		ifi := nlmsg.Ifinfo{}
 		binary.Read(reader, binary.LittleEndian, &ifi)
 		fmt.Printf("  LINK: %+v\n", ifi)
+		for i := 0; i < 10; i++ {
+			attr, err := nlmsg.ReadAttr(reader)
+			if err != nil {
+				return
+			}
+			if attr == nil {
+				break
+			}
+			fmt.Printf("    attr[%d]: %+v\n", i, *attr)
+		}
 	case syscall.RTM_NEWROUTE, syscall.RTM_DELROUTE:
 		fmt.Printf("  ROUTE: \n")
 	}
