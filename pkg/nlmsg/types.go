@@ -5,7 +5,7 @@ import (
 	"syscall"
 )
 
-type NlmsgType uint32
+type NlmsgType uint16
 
 func (nt NlmsgType) String() string {
 	switch nt {
