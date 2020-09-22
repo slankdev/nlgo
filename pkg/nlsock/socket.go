@@ -1,6 +1,9 @@
 package nlsock
 
 import (
+	"os"
+	"syscall"
+
 	"golang.org/x/sys/unix"
 )
 
@@ -38,5 +41,12 @@ func (s *Socket) Close() error {
 }
 
 func (s *Socket) Receive() ([]byte, error) {
-	return nil, nil
+	b := make([]byte, os.Getpagesize())
+	n, _, err := syscall.Recvfrom(s.fd, b, 0)
+	if err != nil {
+		return nil, err
+	}
+
+	b = b[:n]
+	return b, nil
 }

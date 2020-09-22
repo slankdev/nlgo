@@ -1,6 +1,9 @@
 package nldump
 
 import (
+	"encoding/hex"
+	"fmt"
+
 	"github.com/k0kubun/pp"
 	"github.com/slankdev/nlgo/pkg/nlsock"
 	"github.com/spf13/cobra"
@@ -23,11 +26,20 @@ func NewCommand() *cobra.Command {
 
 func appMain(cmd *cobra.Command, args []string) error {
 	var err error
-	config.sock, err = nlsock.NewSocket(0x00, 0x0F)
+	config.sock, err = nlsock.NewSocket(0x00, 0xffffffff)
 	if err != nil {
 		return err
 	}
 
 	pp.Println(config.sock)
+	for {
+		b, err := config.sock.Receive()
+		if err != nil {
+			return err
+		}
+
+		fmt.Println(hex.Dump(b))
+		fmt.Println("-----")
+	}
 	return nil
 }
