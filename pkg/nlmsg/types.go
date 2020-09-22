@@ -145,9 +145,9 @@ func (f NlmsgFlags) String() string {
 	}
 
 	if str == "" {
-		str = "<n/a>"
+		str = fmt.Sprintf("<(%d)>", f)
 	} else {
-		str = fmt.Sprintf("<%s>", str[:len(str)-2])
+		str = fmt.Sprintf("<(%d)%s>", f, str[:len(str)-2])
 	}
 	return str
 }
