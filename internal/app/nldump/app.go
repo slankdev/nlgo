@@ -33,7 +33,6 @@ func appMain(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	pp.Println(config.sock)
 	for {
 		b, err := config.sock.Receive()
 		if err != nil {
