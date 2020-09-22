@@ -1,10 +1,12 @@
 package nldump
 
 import (
-	"encoding/hex"
+	"bytes"
+	"encoding/binary"
 	"fmt"
 
 	"github.com/k0kubun/pp"
+	"github.com/slankdev/nlgo/pkg/nlmsg"
 	"github.com/slankdev/nlgo/pkg/nlsock"
 	"github.com/spf13/cobra"
 )
@@ -38,7 +40,11 @@ func appMain(cmd *cobra.Command, args []string) error {
 			return err
 		}
 
-		fmt.Println(hex.Dump(b))
+		hdr := nlmsg.Header{}
+		reader := bytes.NewReader(b)
+		binary.Read(reader, binary.LittleEndian, &hdr)
+		pp.Println(hdr)
+		//fmt.Println(hex.Dump(b))
 		fmt.Println("-----")
 	}
 	return nil
