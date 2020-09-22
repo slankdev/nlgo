@@ -3,7 +3,9 @@ package nldump
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
+	"syscall"
 
 	"github.com/slankdev/nlgo/pkg/nlmsg"
 	"github.com/slankdev/nlgo/pkg/nlsock"
@@ -38,11 +40,26 @@ func appMain(cmd *cobra.Command, args []string) error {
 			return err
 		}
 
-		hdr := nlmsg.Header{}
-		reader := bytes.NewReader(b)
-		binary.Read(reader, binary.LittleEndian, &hdr)
-		fmt.Println("-----")
-		fmt.Printf("HDR: %+v\n", hdr)
+		dump(b)
 	}
 	return nil
+}
+
+func dump(b []byte) {
+	hdr := nlmsg.Header{}
+	reader := bytes.NewReader(b)
+	binary.Read(reader, binary.LittleEndian, &hdr)
+	fmt.Println("-----")
+	fmt.Printf("HDR: %+v\n", hdr)
+
+	switch hdr.Type {
+	case syscall.RTM_NEWLINK, syscall.RTM_DELLINK:
+		ifi := nlmsg.Ifinfo{}
+		binary.Read(reader, binary.LittleEndian, &ifi)
+		fmt.Printf("  LINK: %+v\n", ifi)
+	case syscall.RTM_NEWROUTE, syscall.RTM_DELROUTE:
+		fmt.Printf("  ROUTE: \n")
+	}
+
+	fmt.Printf(hex.Dump(b[0:64]))
 }
