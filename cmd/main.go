@@ -6,12 +6,13 @@ import (
 	"os"
 	"time"
 
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/pcap"
 	"github.com/spf13/cobra"
 )
 
 var config struct {
-	arg1 string
-	arg2 string
+	ifname string
 }
 
 func newCommand() *cobra.Command {
@@ -19,13 +20,23 @@ func newCommand() *cobra.Command {
 		Use:  "cmd",
 		RunE: appMain,
 	}
-	cmd.Flags().StringVar(&config.arg1, "arg1", "def1", "this is arg1")
-	cmd.Flags().StringVar(&config.arg2, "arg2", "def2", "this is arg2")
+	cmd.Flags().StringVarP(&config.ifname, "interface", "i", "lo", "interface to capture")
 	return cmd
 }
 
 func appMain(cmd *cobra.Command, args []string) error {
-	fmt.Printf("arg1=%s, arg2=%s\n", config.arg1, config.arg2)
+	fmt.Printf("ifname=%s\n", config.ifname)
+
+	handle, err := pcap.OpenLive(config.ifname, 1600, true, pcap.BlockForever)
+	if err != nil {
+		return err
+	}
+
+	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
+	for packet := range packetSource.Packets() {
+		fmt.Println(packet)
+	}
+
 	return nil
 }
 
