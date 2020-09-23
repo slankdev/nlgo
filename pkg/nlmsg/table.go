@@ -2,7 +2,6 @@ package nlmsg
 
 import (
 	"fmt"
-	"syscall"
 
 	"github.com/slankdev/nlgo/pkg/util"
 )
@@ -15,10 +14,16 @@ type Context struct {
 }
 
 var TableIfinfo = map[uint16]Context{
-	syscall.IFLA_MTU:       {nm: "MTU", fn: util.ByteToU32},
-	syscall.IFLA_IFNAME:    {nm: "IFNAME", fn: util.ByteToString},
-	syscall.IFLA_OPERSTATE: {nm: "OPERSTATE", fn: util.ByteToU8},
-	syscall.IFLA_TXQLEN:    {nm: "TXQLEN", fn: util.ByteToU32},
+	IFLA_MTU:           {nm: "MTU", fn: util.ByteToU32},
+	IFLA_IFNAME:        {nm: "IFNAME", fn: util.ByteToString},
+	IFLA_OPERSTATE:     {nm: "OPERSTATE", fn: util.ByteToU8},
+	IFLA_TXQLEN:        {nm: "TXQLEN", fn: util.ByteToU32},
+	IFLA_LINKMODE:      {nm: "LINKMODE", fn: util.ByteToU8},
+	IFLA_MIN_MTU:       {nm: "MIN_MTU", fn: util.ByteToU32},
+	IFLA_MAX_MTU:       {nm: "MAX_MTU", fn: util.ByteToU32},
+	IFLA_GROUP:         {nm: "GROUP", fn: util.ByteToU32},
+	IFLA_PROMISCUITY:   {nm: "PROMISCUITY", fn: util.ByteToU32},
+	IFLA_NUM_TX_QUEUES: {nm: "NUM_TX_QUEUES", fn: util.ByteToU32},
 }
 
 func (a Attr) String(tab map[uint16]Context) string {
