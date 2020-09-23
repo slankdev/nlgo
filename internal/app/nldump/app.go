@@ -65,7 +65,7 @@ func dump(b []byte) {
 			if attr == nil {
 				break
 			}
-			fmt.Printf("    attr[%d]: %+v\n", i, *attr)
+			fmt.Printf("    attr[%d]: %+v --> %s\n", i, *attr, attr.String(nlmsg.TableIfinfo))
 		}
 	case syscall.RTM_NEWROUTE, syscall.RTM_DELROUTE:
 		fmt.Printf("  ROUTE: \n")
