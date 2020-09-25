@@ -11,3 +11,11 @@ type Header struct {
 	Seq   uint32
 	Pid   uint32
 }
+
+type Ifinfo struct {
+	Family uint16
+	Type   nlconst.IfinfoType
+	Index  int32
+	Flags  nlconst.IfinfoFlags
+	Change nlconst.Bit32
+}

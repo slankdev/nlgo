@@ -240,49 +240,65 @@ func (t NlmsgType) String() string {
 func (f NlmsgFlags) String() string {
 	str := ""
 	if f&syscall.NLM_F_REQUEST != 0 {
+		f -= syscall.NLM_F_REQUEST
 		str += "REQUEST|"
 	}
 	if f&syscall.NLM_F_ACK != 0 {
+		f -= syscall.NLM_F_ACK
 		str += "ACK|"
 	}
 	if f&syscall.NLM_F_APPEND != 0 {
+		f -= syscall.NLM_F_APPEND
 		str += "APPEND|"
 	}
 	if f&syscall.NLM_F_ATOMIC != 0 {
+		f -= syscall.NLM_F_ATOMIC
 		str += "ATOMIC|"
 	}
 	if f&syscall.NLM_F_CREATE != 0 {
+		f -= syscall.NLM_F_CREATE
 		str += "CREATE|"
 	}
 	if f&syscall.NLM_F_DUMP != 0 {
+		f -= syscall.NLM_F_DUMP
 		str += "DUMP|"
 	}
 	if f&syscall.NLM_F_ECHO != 0 {
+		f -= syscall.NLM_F_ECHO
 		str += "ECHO|"
 	}
 	if f&syscall.NLM_F_EXCL != 0 {
+		f -= syscall.NLM_F_EXCL
 		str += "EXCL|"
 	}
 	if f&syscall.NLM_F_MATCH != 0 {
+		f -= syscall.NLM_F_MATCH
 		str += "MATCH|"
 	}
 	if f&syscall.NLM_F_MULTI != 0 {
+		f -= syscall.NLM_F_MULTI
 		str += "MULTI|"
 	}
 	if f&syscall.NLM_F_REPLACE != 0 {
+		f -= syscall.NLM_F_REPLACE
 		str += "REPLACE|"
 	}
 	if f&syscall.NLM_F_REQUEST != 0 {
+		f -= syscall.NLM_F_REQUEST
 		str += "REQUEST|"
 	}
 	if f&syscall.NLM_F_ROOT != 0 {
+		f -= syscall.NLM_F_ROOT
 		str += "ROOT|"
+	}
+	if f != 0 {
+		str += fmt.Sprintf("UNKNOWN(%#x)|", int(f))
 	}
 
 	if str == "" {
 		str = fmt.Sprintf("<(%d)>", f)
 	} else {
-		str = fmt.Sprintf("<(%d)%s>", f, str[:len(str)-2])
+		str = fmt.Sprintf("<(%d)%s>", f, str[:len(str)-1])
 	}
 	return str
 }
